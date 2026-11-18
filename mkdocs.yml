@@ -1,0 +1,48 @@
+site_name: ml_structural_system
+site_description: Infer the structural system of buildings from footprints and low-cost attributes.
+repo_url: https://github.com/GeomaticsCaminosUPM/ml_structural_system
+repo_name: GeomaticsCaminosUPM/ml_structural_system
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle: { icon: material/weather-night, name: Dark mode }
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle: { icon: material/weather-sunny, name: Light mode }
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc: { permalink: true }
+  - pymdownx.superfences
+  - pymdownx.arithmatex: { generic: true }
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            show_root_heading: true
+            show_source: false
+            members_order: source
+            separate_signature: true
+
+nav:
+  - Home: index.md
+  - Example: examples.md
+  - Paper results map: paper_map.md
+  - Configuration: configuration.md
+  - How it works: technical.md
+  - API reference: api.md

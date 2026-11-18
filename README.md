@@ -1,0 +1,70 @@
+# ml_structural_system
+
+Predict the structural system of individual buildings (adobe, reinforced concrete, masonry, steel...) from their footprint, their neighbors and a few low-cost attributes such as height.
+
+It is the code of the paper *How far can footprint data go? Inferring structural systems for seismic exposure models across three Latin American cities*. The experiments, data and figures of the paper are in [ml_structural_system_paper](https://github.com/GeomaticsCaminosUPM/ml_structural_system_paper), and its results can be explored with maps in a [Google Colab notebook](https://colab.research.google.com/github/GeomaticsCaminosUPM/ml_structural_system_paper/blob/main/paper_results.ipynb).
+
+![Maps](examples/ensanche_quisquella/output/maps.jpg)
+
+## What it does
+
+1. **Split**: computes missing footprint features with [footprint_attributes](https://github.com/GeomaticsCaminosUPM/footprint_attributes), groups touching buildings into blocks, maps survey codes to classes and splits the labeled buildings into training, validation and test sets made of whole blocks.
+2. **Train**: five models (logistic regression, balanced random forest, histogram gradient boosting, XGBoost, CatBoost). Each one gets a cross-validated search over hyperparameters and imbalance strategies (class weights, Synthetic Minority Over-sampling Technique (SMOTE), SMOTE followed by Tomek-link cleaning), then class-probability divisors tuned on the validation set to maximize macro F1.
+3. **Test and assess**: macro F1, accuracy, Cohen's κ and the True Skill Statistic on the test set, agreement between models, bootstrap confidence intervals and feature importance.
+4. **Predict**: applies the trained models to any buildings, surveyed or not.
+
+XGBoost and CatBoost train on the GPU when CUDA is available. Their standard wheels already include GPU support on Linux and Windows.
+
+## Installation
+
+```bash
+git clone https://github.com/GeomaticsCaminosUPM/ml_structural_system.git
+cd ml_structural_system
+uv sync
+```
+
+With pip: `pip install git+https://github.com/GeomaticsCaminosUPM/ml_structural_system.git`, or `pip install -r requirements.txt` for the tested versions. Python 3.12 or newer.
+
+## Quick start
+
+Write a `config.yaml` ([example](examples/ensanche_quisquella/config.yaml)), then:
+
+```bash
+mlss split      --config config.yaml --output-dir splits
+mlss preprocess --config config.yaml --input-dir splits --output-dir preprocessed_splits
+mlss report     --config config.yaml --output-dir report    # train, test and assess
+```
+
+```python
+from ml_structural_system.predict import predict
+
+buildings = predict("config.yaml", "buildings.gpkg")   # one pred_<model> column per model
+```
+
+The input needs footprint polygons and, for training, the surveyed structural system. `height`, `year` and `roof_material` are used only if listed as features.
+
+## Example
+
+`examples/ensanche_quisquella/` trains and tests three models on 758 surveyed buildings in Santo Domingo and draws the maps above:
+
+```bash
+uv run python examples/ensanche_quisquella/run_example.py
+```
+
+## Documentation
+
+```bash
+uv run mkdocs serve
+```
+
+The docs cover the example, the configuration, how the method works and the API.
+
+## Tests
+
+```bash
+uv run pytest
+```
+
+## License
+
+[European Union Public Licence v1.2 (EUPL-1.2)](LICENSE). The example data are a subset of the paper's Ensanche Quisqueya survey.

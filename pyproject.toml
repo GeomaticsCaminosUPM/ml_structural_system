@@ -1,0 +1,47 @@
+[project]
+name = "ml-structural-system"
+version = "0.1.0"
+description = "Infer the structural system of buildings from footprints and low-cost attributes."
+readme = "README.md"
+license = "EUPL-1.2"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+authors = [{ name = "Advanced Geomatics group (AGA), Universidad Politécnica de Madrid" }]
+dependencies = [
+    "pandas>=2.2",
+    "numpy>=2.0",
+    "scipy>=1.13",
+    "scikit-learn>=1.8",
+    "imbalanced-learn>=0.13",
+    "xgboost>=2.1",
+    "catboost>=1.2.7",
+    "shap>=0.46",
+    "mlflow>=2.17",
+    "joblib>=1.4",
+    "pyyaml>=6.0",
+    "geopandas>=1.0",
+    "tqdm>=4.66",
+    "matplotlib>=3.9",
+    # Not on PyPI yet: installed straight from GitHub at a fixed commit.
+    "footprint-attributes @ git+https://github.com/GeomaticsCaminosUPM/footprint_attributes@b1aea6c2bb75613e1eff25fa0ed80a2b71088184",
+]
+
+[project.scripts]
+mlss = "ml_structural_system.cli:main"
+
+[project.urls]
+Repository = "https://github.com/GeomaticsCaminosUPM/ml_structural_system"
+
+[dependency-groups]
+docs = ["mkdocs-material>=9.5", "mkdocstrings[python]>=0.26"]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ml_structural_system"]

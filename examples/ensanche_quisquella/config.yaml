@@ -1,0 +1,90 @@
+# Ensanche Quisqueya, Santo Domingo: three fast models.
+# Paths are relative to this file. Outputs are written next to it.
+random_state: 42
+n_splits: 5
+
+label: survey_structural_system
+
+dataset:
+  train_path: output/preprocessed_splits/train_preprocessed.csv
+  val_path: output/preprocessed_splits/val_preprocessed.csv
+  test_path: output/preprocessed_splits/test_preprocessed.csv
+  train_gpkg: output/splits/train_df.gpkg
+  val_gpkg: output/splits/val_df.gpkg
+  test_gpkg: output/splits/test_df.gpkg
+
+models_dir: output/trained_models
+
+mlflow:
+  db_path: output/mlflow.db
+
+models:
+  enabled:
+    - LogisticRegression
+    - RandomForest
+    - XGBoost
+
+preprocessing:
+  seed: 42
+  label: survey_structural_system
+  # Survey codes grouped into four classes. I (unknown) is dropped.
+  label_values: [ADO, CR, M, S]
+  label_replacements:
+    S_light: S
+    S_frame: CR
+    MUR: M
+    MCF: M
+    MR: M
+    I: None
+  min_class_fraction: 0.01      # the 2 steel buildings are too few and are dropped
+  min_class_size_per_split: 20
+
+  # Footprint features missing from the data are computed with footprint_attributes,
+  # and code_quality is derived from year with the Dominican seismic-code years.
+  compute_missing_features: true
+  id_col: block_id               # computed from touching footprints if missing
+  data:
+    source: ../../data/ensanche_quisquella.gpkg
+    code_type: dominican_republic
+    val_size: 0.15
+    test_size: 0.20
+
+  ignore_features: [id, dataset, geometry, block_id]
+
+  ordinal_feature_mappings:
+    code_quality: [pre_code, low_code, medium_code, high_code]
+  numeric_feature_ranges:
+    year: [1900, 2050]
+  categorical_feature_mappings:
+    blockPosition: [corner, confined, isolated, lateral, torque]
+    roof_material: [metallic, bright_concrete, dark_shadow, asphalt]
+
+  # year, code_quality and roof_material are optional: remove them if your data lacks them.
+  feature_columns:
+    - height
+    - year
+    - code_quality
+    - roof_material
+    - EC8_eccentricityRatio
+    - EC8_radiusRatio
+    - EC8_compactness
+    - ASCE7_setbackRatio
+    - ASCE7_holeRatio
+    - ASCE7_parallelityAngle
+    - GNDTII_beta1_mainShapeSlenderness
+    - GNDTII_beta2_setbackRatio
+    - GNDTII_beta4_eccentricityRatio
+    - GNDTII_beta6_setbackSlenderness
+    - CSCR2010_eccentricityRatio
+    - NTC23_setbackRatio
+    - NTC23_holeRatio
+    - polsby_popper
+    - convex_hull_irregularity
+    - inertia_circle_ratio
+    - slenderness_bbox
+    - slenderness_inertia
+    - contact_force
+    - contact_confinementRatio
+    - contact_angularAcc
+    - contact_angle
+    - blockPosition

@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+build/
+dist/
+site/
+.pytest_cache/
+.DS_Store
+catboost_info/
+mlruns/
+mlflow.db
+
+# Example outputs: keep only the figures and the score table
+examples/*/output/*
+!examples/*/output/*.jpg
+!examples/*/output/test_scores.csv
