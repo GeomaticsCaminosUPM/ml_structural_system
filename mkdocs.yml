@@ -1,4 +1,5 @@
 site_name: ml_structural_system
+site_url: https://geomaticscaminosupm.github.io/ml_structural_system/
 site_description: Infer the structural system of buildings from footprints and low-cost attributes.
 repo_url: https://github.com/GeomaticsCaminosUPM/ml_structural_system
 repo_name: GeomaticsCaminosUPM/ml_structural_system

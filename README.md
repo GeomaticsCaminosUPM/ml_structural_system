@@ -53,11 +53,7 @@ uv run python examples/ensanche_quisquella/run_example.py
 
 ## Documentation
 
-```bash
-uv run mkdocs serve
-```
-
-The docs cover the example, the configuration, how the method works and the API.
+[geomaticscaminosupm.github.io/ml_structural_system](https://geomaticscaminosupm.github.io/ml_structural_system/) covers the example, the configuration, how the method works and the API, plus a map of the paper's results. To preview it locally: `uv run mkdocs serve`.
 
 ## Tests
 
