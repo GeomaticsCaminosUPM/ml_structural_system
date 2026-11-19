@@ -1,5 +1,5 @@
 model,macro_f1,accuracy,kappa,tss
-XGBoost,0.936,0.945,0.872,0.861
-LogisticRegression,0.928,0.938,0.856,0.851
-RandomForest,0.879,0.904,0.761,0.707
-Majority baseline,0.407,0.685,0.0,0.0
+LogisticRegression,0.961,0.965,0.921,0.936
+RandomForest,0.953,0.957,0.906,0.926
+XGBoost,0.946,0.95,0.891,0.915
+Majority baseline,0.4,0.667,0.0,0.0

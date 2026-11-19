@@ -44,7 +44,7 @@ preprocessing:
   compute_missing_features: true
   id_col: block_id               # computed from touching footprints if missing
   data:
-    source: ../../data/ensanche_quisquella.gpkg
+    source: data/ensanche_quisquella.gpkg   # downloaded by run_example.py
     code_type: dominican_republic
     val_size: 0.15
     test_size: 0.20

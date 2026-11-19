@@ -15,3 +15,6 @@ mlflow.db
 examples/*/output/*
 !examples/*/output/*.jpg
 !examples/*/output/test_scores.csv
+
+# Example data, downloaded from the paper repository by run_example.py
+examples/*/data/

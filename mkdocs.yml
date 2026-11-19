@@ -1,28 +1,68 @@
 site_name: ml_structural_system
 site_url: https://geomaticscaminosupm.github.io/ml_structural_system/
-site_description: Infer the structural system of buildings from footprints and low-cost attributes.
+site_description: Predict the structural system of individual buildings from footprints and low-cost geospatial attributes.
+site_author: Advanced Geomatics group (AGA), Universidad Politécnica de Madrid
 repo_url: https://github.com/GeomaticsCaminosUPM/ml_structural_system
 repo_name: GeomaticsCaminosUPM/ml_structural_system
+edit_uri: edit/main/docs/
+copyright: Copyright &copy; Advanced Geomatics group, Universidad Politécnica de Madrid. Released under the EUPL-1.2.
 
 theme:
   name: material
-  features:
-    - navigation.sections
-    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/office-building-outline
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
+      primary: indigo
+      accent: indigo
       toggle: { icon: material/weather-night, name: Dark mode }
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
+      primary: indigo
+      accent: indigo
       toggle: { icon: material/weather-sunny, name: Light mode }
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.action.edit
 
 markdown_extensions:
+  - abbr
   - admonition
+  - attr_list
+  - md_in_html
   - tables
-  - toc: { permalink: true }
-  - pymdownx.superfences
-  - pymdownx.arithmatex: { generic: true }
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js
@@ -33,17 +73,60 @@ plugins:
       handlers:
         python:
           paths: [src]
+          inventories:
+            - https://docs.python.org/3/objects.inv
+            - https://numpy.org/doc/stable/objects.inv
+            - https://pandas.pydata.org/docs/objects.inv
+            - https://scikit-learn.org/stable/objects.inv
+            - https://geopandas.org/en/stable/objects.inv
           options:
             docstring_style: google
+            docstring_section_style: table
             show_root_heading: true
-            show_source: false
-            members_order: source
+            show_root_full_path: false
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            show_source: true
+            show_signature_annotations: true
             separate_signature: true
+            signature_crossrefs: true
+            merge_init_into_class: true
+            members_order: source
+            summary: true
+            filters: ["!^_"]
+            heading_level: 2
 
 nav:
   - Home: index.md
-  - Example: examples.md
-  - Paper results map: paper_map.md
-  - Configuration: configuration.md
-  - How it works: technical.md
-  - API reference: api.md
+  - Getting started:
+      - Installation: getting-started/installation.md
+      - Quickstart: getting-started/quickstart.md
+  - User guide:
+      - Preparing data: guide/data.md
+      - Configuration: guide/configuration.md
+      - Command line: guide/cli.md
+      - Output files: guide/outputs.md
+      - Predicting new buildings: guide/prediction.md
+  - How it works:
+      - concepts/index.md
+      - Spatial split: concepts/splitting.md
+      - Model selection and imbalance: concepts/training.md
+      - Decision rule: concepts/decision-rule.md
+      - Evaluation and feature importance: concepts/evaluation.md
+  - Examples:
+      - Ensanche Quisqueya: examples/ensanche-quisquella.md
+      - Paper results map: examples/paper-map.md
+  - API reference:
+      - reference/index.md
+      - Prediction: reference/predict.md
+      - Figures: reference/figures.md
+      - Configuration: reference/config.md
+      - Data preparation: reference/dataset_prep.md
+      - Models: reference/models.md
+      - Training and testing: reference/training.md
+      - Assessment: reference/assessment.md
+      - Command line: reference/cli.md
+      - Exceptions: reference/exceptions.md
+  - About:
+      - Citation: about/citation.md
+      - License: about/license.md

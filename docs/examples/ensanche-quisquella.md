@@ -1,12 +1,15 @@
 # Example: Ensanche Quisqueya
 
+!!! warning "Altered footprints"
+    Until the peer-reviewed version of the paper is published, the footprints without a survey label in the example data are not the real ones. Their geometry, height and other attributes have been altered, so they look similar to the buildings of the area but do not match them. The 758 surveyed buildings are real.
+
 [`examples/ensanche_quisquella/`](https://github.com/GeomaticsCaminosUPM/ml_structural_system/tree/main/examples/ensanche_quisquella) trains and tests three fast models on a survey of 758 labeled buildings in Ensanche Quisqueya, Santo Domingo (Dominican Republic). It takes a few minutes on a laptop.
 
 ```bash
 uv run python examples/ensanche_quisquella/run_example.py
 ```
 
-The data file, `data/ensanche_quisquella.gpkg`, holds 1,400 footprints with only `id`, `height`, `year`, `roof_material` and `survey_structural_system`. Everything else is computed:
+The data are downloaded on the first run from the paper repository, [ml_structural_system_paper](https://github.com/GeomaticsCaminosUPM/ml_structural_system_paper), to `examples/ensanche_quisquella/data/`. The script keeps only 1,400 footprints with `id`, `height`, `year`, `roof_material` and `survey_structural_system`. Everything else is computed:
 
 - the 23 footprint features, with footprint_attributes
 - `code_quality`, from `year` with the Dominican seismic-code years (`code_type: dominican_republic`)
@@ -41,23 +44,23 @@ On the test buildings, `predict` gives exactly the scores of `mlss report`:
 
 | Model | Macro F1 | Accuracy | Cohen's κ | True Skill Statistic |
 |---|---|---|---|---|
-| XGBoost | 0.936 | 0.945 | 0.872 | 0.861 |
-| LogisticRegression | 0.928 | 0.938 | 0.856 | 0.851 |
-| RandomForest | 0.879 | 0.904 | 0.761 | 0.707 |
-| Majority baseline | 0.407 | 0.685 | 0.000 | 0.000 |
+| LogisticRegression | 0.961 | 0.965 | 0.921 | 0.936 |
+| RandomForest | 0.953 | 0.957 | 0.906 | 0.926 |
+| XGBoost | 0.946 | 0.950 | 0.891 | 0.915 |
+| Majority baseline | 0.400 | 0.667 | 0.000 | 0.000 |
 
-![Scores](assets/scores.jpg)
+![Scores](../assets/scores.jpg)
 
-![Confusion matrices](assets/confusion_matrices.jpg)
+![Confusion matrices](../assets/confusion_matrices.jpg)
 
 ## 3. Maps
 
 ```python
-plot_prediction_maps(buildings, test, "class", "XGBoost")
+plot_prediction_maps(buildings, test, "class", "LogisticRegression")  # best model
 ```
 
-Left: survey labels. Center: XGBoost predictions for every footprint, including the unsurveyed ones. Right: test buildings, correct or wrong.
+Left: survey labels. Center: predictions of the best model (logistic regression) for every footprint, including the unsurveyed ones. Right: test buildings, correct or wrong.
 
-![Maps](assets/maps.jpg)
+![Maps](../assets/maps.jpg)
 
 The predictions are saved to `output/predictions.gpkg` for use in a geographic information system (GIS).

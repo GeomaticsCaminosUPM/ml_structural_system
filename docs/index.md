@@ -1,55 +1,63 @@
 # ml_structural_system
 
-Predict the structural system of individual buildings (adobe, reinforced concrete, masonry, steel...) from their footprint, their neighbors and a few low-cost attributes such as height.
+**Predict the structural system of individual buildings** (adobe, reinforced concrete, masonry, steel...) from their footprint, their neighbors and a few low-cost geospatial attributes such as height.
 
-It is the code of the paper *How far can footprint data go? Inferring structural systems for seismic exposure models across three Latin American cities*. The experiments, data and figures of the paper are in [ml_structural_system_paper](https://github.com/GeomaticsCaminosUPM/ml_structural_system_paper), and its results can be explored with maps in a [Google Colab notebook](https://colab.research.google.com/github/GeomaticsCaminosUPM/ml_structural_system_paper/blob/main/paper_results.ipynb).
+It is the code of the paper *Estimating building structural systems from footprints: transferability of machine learning models across three Latin American cities*, packaged so it can be applied to any city with building footprints and a field survey.
 
-## Installation
+<div class="grid cards" markdown>
 
-```bash
-git clone https://github.com/GeomaticsCaminosUPM/ml_structural_system.git
-cd ml_structural_system
-uv sync
+-   :material-rocket-launch:{ .lg .middle } **Getting started**
+
+    ---
+
+    Install the package and run your first experiment in a few commands.
+
+    [:octicons-arrow-right-24: Installation](getting-started/installation.md) · [Quickstart](getting-started/quickstart.md)
+
+-   :material-book-open-variant:{ .lg .middle } **User guide**
+
+    ---
+
+    Data requirements, every configuration key, the `mlss` command line and the files it writes.
+
+    [:octicons-arrow-right-24: Preparing data](guide/data.md)
+
+-   :material-cog-outline:{ .lg .middle } **How it works**
+
+    ---
+
+    Spatially grouped splits, imbalance handling, the tuned decision rule and the evaluation.
+
+    [:octicons-arrow-right-24: Overview](concepts/index.md)
+
+-   :material-code-braces:{ .lg .middle } **API reference**
+
+    ---
+
+    Every module, class and function, generated from the docstrings.
+
+    [:octicons-arrow-right-24: Reference](reference/index.md)
+
+</div>
+
+## What it does
+
+```mermaid
+flowchart LR
+    A[Footprints<br/>+ survey labels] --> B[Features<br/>footprint_attributes]
+    B --> C[Spatial split<br/>train · validation · test]
+    C --> D[Five models<br/>CV search + tuning]
+    D --> E[Test scores<br/>and maps]
+    D --> F[Predictions for<br/>every building]
 ```
 
-Or with pip: `pip install git+https://github.com/GeomaticsCaminosUPM/ml_structural_system.git`. Python 3.12 or newer.
+- **Features from footprints**: plan-shape irregularity indices from five seismic codes and contact descriptors with neighboring buildings, computed with [footprint_attributes](https://github.com/GeomaticsCaminosUPM/footprint_attributes) when missing. Height, construction year and roof material are used when available.
+- **Spatially grouped splits**: touching buildings form blocks, and each block goes entirely to training, validation or test, so neighbors never leak information.
+- **Five classifiers**: logistic regression, balanced random forest, histogram gradient boosting, XGBoost and CatBoost, each with a cross-validated search over hyperparameters and imbalance strategies.
+- **A tuned decision rule** that keeps minority classes from being swallowed by the majority class.
+- **Assessment**: macro F1, accuracy, Cohen's κ, True Skill Statistic, bootstrap confidence intervals, agreement between models and feature importance.
+- **GPU support**: XGBoost and CatBoost train on a CUDA GPU when one is available.
 
-XGBoost and CatBoost train on the GPU when CUDA is available and on the CPU otherwise. Their standard wheels already include GPU support on Linux and Windows, so nothing else needs installing.
+## Paper and results
 
-## Quick start
-
-Everything is set in a `config.yaml` (see [Configuration](configuration.md)). Then:
-
-```bash
-mlss split      --config config.yaml --output-dir splits
-mlss preprocess --config config.yaml --input-dir splits --output-dir preprocessed_splits
-mlss report     --config config.yaml --output-dir report      # train, test and assess every model
-```
-
-and, to apply the trained models to any buildings, labeled or not:
-
-```python
-from ml_structural_system.predict import predict
-
-buildings = predict("config.yaml", "buildings.gpkg")   # one pred_<model> column per model
-```
-
-## Input data
-
-A GeoPackage with one footprint polygon per building, covering every building of the area (neighbor features depend on the buildings around each one).
-
-| Column | Required | Notes |
-|---|---|---|
-| `geometry` | yes | Footprint polygons, any coordinate reference system |
-| label column | for training | Surveyed structural system, mapped to classes by `label_replacements` |
-| `height` | if used as a feature | Meters |
-| `year`, `roof_material` | no | Only if listed in `feature_columns`. Nothing estimates them. |
-| `code_quality` | no | Derived from `year` when `code_type` is set |
-| footprint features | no | Computed with [footprint_attributes](https://github.com/GeomaticsCaminosUPM/footprint_attributes) when missing |
-| `block_id` | no | Computed from touching footprints when missing |
-
-See [Example](examples.md) for a complete run and [How it works](technical.md) for the details.
-
-## License
-
-[European Union Public Licence v1.2 (EUPL-1.2)](https://github.com/GeomaticsCaminosUPM/ml_structural_system/blob/main/LICENSE).
+The experiments, data and figures of the paper are in [ml_structural_system_paper](https://github.com/GeomaticsCaminosUPM/ml_structural_system_paper). Its results can be explored in the [interactive map](examples/paper-map.md) and in a [Google Colab notebook](https://colab.research.google.com/github/GeomaticsCaminosUPM/ml_structural_system_paper/blob/main/paper_results.ipynb).

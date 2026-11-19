@@ -1,9 +1,11 @@
 """Train and test three fast models on the Ensanche Quisqueya survey (Santo Domingo).
 
-The data file only has the footprints, building height, construction year,
-roof material and the surveyed structural system. The footprint features are
-computed with footprint_attributes and the seismic-code level is derived from
-the construction year. Every setting is in config.yaml.
+The survey is downloaded once from the paper repository
+(GeomaticsCaminosUPM/ml_structural_system_paper), keeping only the footprints,
+building height, construction year, roof material and the surveyed structural
+system. The footprint features are computed with footprint_attributes and the
+seismic-code level is derived from the construction year. Every setting is in
+config.yaml.
 
 Run from the repository root:
 
@@ -14,6 +16,8 @@ Everything is written to examples/ensanche_quisquella/output/.
 import shutil
 import subprocess
 import sys
+import tempfile
+import urllib.request
 from pathlib import Path
 
 import geopandas as gpd
@@ -26,16 +30,33 @@ from ml_structural_system.predict import predict
 HERE = Path(__file__).resolve().parent
 CONFIG = HERE / "config.yaml"
 OUT = HERE / "output"
-DATA = HERE.parent.parent / "data" / "ensanche_quisquella.gpkg"
+DATA = HERE / "data" / "ensanche_quisquella.gpkg"
+URL = ("https://raw.githubusercontent.com/GeomaticsCaminosUPM/ml_structural_system_paper/"
+       "main/data/santo_domingo/ensanche_quisquella.gpkg")
 cfg = yaml.safe_load(CONFIG.read_text())
 LABEL = cfg["label"]
 MODELS = cfg["models"]["enabled"]
+
+
+def download_data() -> None:
+    """Download the survey and keep only the raw columns, so the example computes the rest."""
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp) / "survey.gpkg"
+        urllib.request.urlretrieve(URL, path)
+        survey = gpd.read_file(path)[["id", "height", "year", "roof_material", LABEL, "geometry"]]
+    survey["year"] = survey["year"].astype("Int64")
+    DATA.parent.mkdir(exist_ok=True)
+    survey.to_file(DATA)
 
 
 def mlss(*args: str) -> None:
     """Run one step of the mlss command line."""
     subprocess.run([sys.executable, "-m", "ml_structural_system.cli", *args], check=True)
 
+
+# 0. Data
+if not DATA.exists():
+    download_data()
 
 # 1. Split, prepare features, train, test (from scratch)
 shutil.rmtree(OUT, ignore_errors=True)

@@ -2,7 +2,7 @@
 
 Predict the structural system of individual buildings (adobe, reinforced concrete, masonry, steel...) from their footprint, their neighbors and a few low-cost attributes such as height.
 
-It is the code of the paper *How far can footprint data go? Inferring structural systems for seismic exposure models across three Latin American cities*. The experiments, data and figures of the paper are in [ml_structural_system_paper](https://github.com/GeomaticsCaminosUPM/ml_structural_system_paper), and its results can be explored with maps in a [Google Colab notebook](https://colab.research.google.com/github/GeomaticsCaminosUPM/ml_structural_system_paper/blob/main/paper_results.ipynb).
+It is the code of the paper *Estimating building structural systems from footprints: transferability of machine learning models across three Latin American cities*. The experiments, data and figures of the paper are in [ml_structural_system_paper](https://github.com/GeomaticsCaminosUPM/ml_structural_system_paper), and its results can be explored with maps in a [Google Colab notebook](https://colab.research.google.com/github/GeomaticsCaminosUPM/ml_structural_system_paper/blob/main/paper_results.ipynb).
 
 ![Maps](examples/ensanche_quisquella/output/maps.jpg)
 
@@ -45,7 +45,10 @@ The input needs footprint polygons and, for training, the surveyed structural sy
 
 ## Example
 
-`examples/ensanche_quisquella/` trains and tests three models on 758 surveyed buildings in Santo Domingo and draws the maps above:
+> [!WARNING]
+> Until the peer-reviewed version of the paper is published, the footprints without a survey label in the example data are not the real ones. Their geometry, height and other attributes have been altered, so they look similar to the buildings of the area but do not match them. The 758 surveyed buildings are real.
+
+`examples/ensanche_quisquella/` trains and tests three models on 758 surveyed buildings in Santo Domingo and draws the maps above. Its data are downloaded from the paper repository on the first run:
 
 ```bash
 uv run python examples/ensanche_quisquella/run_example.py
@@ -63,4 +66,4 @@ uv run pytest
 
 ## License
 
-[European Union Public Licence v1.2 (EUPL-1.2)](LICENSE). The example data are a subset of the paper's Ensanche Quisqueya survey.
+[European Union Public Licence v1.2 (EUPL-1.2)](LICENSE). The example data are the paper's Ensanche Quisqueya survey, downloaded from the paper repository, with the unlabeled footprints altered (see above).
