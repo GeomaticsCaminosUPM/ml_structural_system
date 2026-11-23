@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1078 220" role="img" aria-label="Commands: split, preprocess, train, test, assess; report runs train, test and assess; sanity needs trained models" font-family="Inter, Helvetica Neue, Arial, sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#111"/></marker></defs>
+<rect width="1078" height="220" fill="#fff"/>
+<rect x="24" y="62" width="150" height="92" fill="#fafafa" stroke="#e6e6e6"/><rect x="24" y="62" width="150" height="7" fill="#B24A2A"/>
+<text x="36" y="98" font-size="14" font-weight="800" fill="#111" font-family="JetBrains Mono, Menlo, Consolas, monospace">mlss split</text>
+<text x="36" y="120" font-size="13.5" fill="#444">raw data to</text><text x="36" y="138" font-size="13.5" fill="#444">train, val, test</text>
+<rect x="200" y="62" width="150" height="92" fill="#fafafa" stroke="#e6e6e6"/><rect x="200" y="62" width="150" height="7" fill="#B24A2A"/>
+<text x="212" y="98" font-size="14" font-weight="800" fill="#111" font-family="JetBrains Mono, Menlo, Consolas, monospace">mlss preprocess</text>
+<text x="212" y="120" font-size="13.5" fill="#444">encode the</text><text x="212" y="138" font-size="13.5" fill="#444">features</text>
+<rect x="376" y="62" width="150" height="92" fill="#fafafa" stroke="#e6e6e6"/><rect x="376" y="62" width="150" height="7" fill="#3D4F63"/>
+<text x="388" y="98" font-size="14" font-weight="800" fill="#111" font-family="JetBrains Mono, Menlo, Consolas, monospace">mlss train</text>
+<text x="388" y="120" font-size="13.5" fill="#444">search, final fit,</text><text x="388" y="138" font-size="13.5" fill="#444">decision rule</text>
+<rect x="552" y="62" width="150" height="92" fill="#fafafa" stroke="#e6e6e6"/><rect x="552" y="62" width="150" height="7" fill="#2E7D6B"/>
+<text x="564" y="98" font-size="14" font-weight="800" fill="#111" font-family="JetBrains Mono, Menlo, Consolas, monospace">mlss test</text>
+<text x="564" y="120" font-size="13.5" fill="#444">score on the</text><text x="564" y="138" font-size="13.5" fill="#444">test split</text>
+<rect x="728" y="62" width="150" height="92" fill="#fafafa" stroke="#e6e6e6"/><rect x="728" y="62" width="150" height="7" fill="#2E7D6B"/>
+<text x="740" y="98" font-size="14" font-weight="800" fill="#111" font-family="JetBrains Mono, Menlo, Consolas, monospace">mlss assess</text>
+<text x="740" y="120" font-size="13.5" fill="#444">agreement, intervals,</text><text x="740" y="138" font-size="13.5" fill="#444">feature importance</text>
+<rect x="904" y="62" width="150" height="92" fill="#fafafa" stroke="#9AA5AE" stroke-dasharray="5 4"/><rect x="904" y="62" width="150" height="7" fill="#9AA5AE"/>
+<text x="916" y="98" font-size="14" font-weight="800" fill="#111" font-family="JetBrains Mono, Menlo, Consolas, monospace">mlss sanity</text>
+<text x="916" y="120" font-size="13.5" fill="#444">flag suspect</text><text x="916" y="138" font-size="13.5" fill="#444">labels (optional)</text>
+<path d="M176 108.0 H198" stroke="#111" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M352 108.0 H374" stroke="#111" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M528 108.0 H550" stroke="#111" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M704 108.0 H726" stroke="#111" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M451.0 60 V36 H979.0 V59" fill="none" stroke="#777" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="715.0" y="30" font-size="12" fill="#777" text-anchor="middle">needs trained models</text>
+<path d="M376 162 V168 H878 V162" fill="none" stroke="#111" stroke-width="1.6"/>
+<text x="627.0" y="190" font-size="14" text-anchor="middle" fill="#111"><tspan font-weight="800" font-family="JetBrains Mono, Menlo, Consolas, monospace">mlss report</tspan> runs these three, plus a summary</text>
+</svg>

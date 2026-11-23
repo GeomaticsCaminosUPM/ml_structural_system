@@ -88,3 +88,6 @@
 
 .ml-use > div, .ml-hero > div, .ml-paper > div { min-width: 0; }
 .ml-figs { align-items: start; }
+
+.md-typeset img.pipeline { width: 100%; max-width: 1002px; height: auto; margin: 8px 0 20px; }
+.md-typeset table td code { white-space: nowrap; }

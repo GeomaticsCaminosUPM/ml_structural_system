@@ -1,17 +1,6 @@
 # How it works
 
-```mermaid
-flowchart TD
-    A[Footprints and survey] --> B[Features<br/>missing footprint indices computed]
-    B --> C[Labels mapped, rare classes dropped]
-    C --> D[Spatial split by blocks<br/>train 65% · validation 15% · test 20%]
-    D --> E[Encoder fitted on train]
-    E --> F[Cross-validated search on train<br/>hyperparameters × imbalance strategies]
-    F --> G[Final fit on train]
-    G --> H[Decision rule tuned on validation]
-    H --> I[Scored once on test]
-    I --> J[Assessment: agreement, intervals, feature importance]
-```
+![The pipeline, from footprints and survey to assessment](../assets/pipeline.svg){ .pipeline }
 
 Each stage has its own page:
 

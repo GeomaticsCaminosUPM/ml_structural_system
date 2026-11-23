@@ -2,11 +2,7 @@
 
 All steps run through the `mlss` command (also `python -m ml_structural_system.cli`). Each takes `--config config.yaml`.
 
-```mermaid
-flowchart LR
-    split --> preprocess --> train --> test --> assess
-    preprocess --> report
-```
+![mlss commands: split, preprocess, train, test and assess; report runs the last three; sanity needs trained models](../assets/cli-flow.svg){ .pipeline }
 
 | Command | What it does |
 |---|---|
