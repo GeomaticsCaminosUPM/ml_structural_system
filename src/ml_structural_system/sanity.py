@@ -17,13 +17,11 @@ from collections.abc import Sequence
 from pathlib import Path
 
 import geopandas as gpd
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib.colors import to_hex
 from shapely.geometry.base import BaseGeometry
 
-from .figures import CLASS_COLORS
+from .figures import class_colors
 
 logger = logging.getLogger(__name__)
 
@@ -107,12 +105,6 @@ def flag_suspects(
     logger.info("Sanity suspects: %d of %d labeled buildings (agreement >= %.0f%%)",
                 len(out), int(label.notna().sum()), 100 * agreement_threshold)
     return out
-
-
-def _class_colors(classes: Sequence[str]) -> dict[str, str]:
-    """Return a hex color per class: the paper's colors, or a categorical palette for new classes."""
-    extra = iter(plt.get_cmap("tab10")(range(10)))
-    return {c: CLASS_COLORS.get(c) or to_hex(next(extra)[:3]) for c in sorted(classes)}
 
 
 def _street_view_url(geom_metric: BaseGeometry) -> str:
@@ -284,7 +276,7 @@ def make_sanity_map(
         raise ValueError("There are no suspect buildings to map.")
     vote_columns = _model_columns(suspects, models)
     seen = set(suspects[label_column].astype(str)) | set(suspects["consensus"].astype(str))
-    colors = _class_colors(list(classes) if classes is not None else seen)
+    colors = class_colors(classes if classes is not None else seen)
     colors.update({c: "#888888" for c in seen if c not in colors})
 
     wgs = suspects.to_crs(4326)

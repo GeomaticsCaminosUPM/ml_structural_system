@@ -13,6 +13,7 @@ theme:
   font:
     text: Inter
     code: JetBrains Mono
+  favicon: assets/favicon.svg
   icon:
     repo: fontawesome/brands/github
     logo: material/office-building-outline

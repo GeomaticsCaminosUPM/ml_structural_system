@@ -46,7 +46,7 @@ Earlier buildings are `pre_code`.
 
 ## Labels
 
-Survey codes are mapped to the classes the models learn with `preprocessing.label_replacements`, and checked against `preprocessing.label_values`. A replacement to `None` drops the building. For example, the paper groups its codes into four classes:
+The classes are yours: nothing in the library fixes them. Survey codes are mapped to the classes the models learn with `preprocessing.label_replacements`, and checked against `preprocessing.label_values`. A replacement to `None` drops the building. For example, the paper groups its codes into four classes (leave `label_values` empty to accept any class):
 
 ```yaml
 label_values: [ADO, CR, M, S]   # adobe, reinforced concrete, masonry, steel

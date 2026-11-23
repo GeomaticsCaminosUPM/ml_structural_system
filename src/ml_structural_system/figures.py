@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
+from itertools import cycle
 
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib.colors import to_hex
 from matplotlib.figure import Figure
 from matplotlib.patches import Patch
 from sklearn.metrics import accuracy_score, cohen_kappa_score, confusion_matrix, f1_score
@@ -21,11 +23,17 @@ CORRECT = "#7FB77E"
 WRONG = "#C0392B"
 
 
-def _color(cls: object) -> str:
-    """Return the map color of a class, light gray for a missing class."""
-    if not isinstance(cls, str):
-        return UNLABELED
-    return CLASS_COLORS.get(cls, plt.get_cmap("tab10")(hash(cls) % 10))
+def class_colors(classes: Iterable[object]) -> dict[str, str]:
+    """Return a hex color for every class name.
+
+    The default classes keep their own color. Any other class gets the next color
+    of matplotlib's ``tab10`` palette in alphabetical order, so the result does not
+    depend on the order of ``classes`` and is the same in every run. Non-string
+    values (missing classes) are ignored.
+    """
+    palette = cycle(to_hex(c) for c in plt.get_cmap("tab10")(range(10)))
+    names = sorted({c for c in classes if isinstance(c, str)})
+    return {c: CLASS_COLORS[c] if c in CLASS_COLORS else next(palette) for c in names}
 
 
 def _name(cls: str) -> str:
@@ -127,7 +135,10 @@ def plot_confusion_matrices(predictions: pd.DataFrame, label_column: str, models
     return fig
 
 
-def plot_class_map(gdf: gpd.GeoDataFrame, column: str, ax: plt.Axes | None = None, title: str | None = None) -> plt.Axes:
+def plot_class_map(
+    gdf: gpd.GeoDataFrame, column: str, ax: plt.Axes | None = None, title: str | None = None,
+    colors: dict[str, str] | None = None,
+) -> plt.Axes:
     """Map buildings colored by class. Buildings without a class are light gray.
 
     Args:
@@ -135,15 +146,19 @@ def plot_class_map(gdf: gpd.GeoDataFrame, column: str, ax: plt.Axes | None = Non
         column: Class column, e.g. the survey label or ``pred_XGBoost``.
         ax: Axes to draw on. A new figure is created if None.
         title: Axes title. Defaults to ``column``.
+        colors: Color of each class, as returned by :func:`class_colors`. Pass the
+            same dict to several maps to keep their colors consistent. Defaults to
+            the classes present in ``column``.
 
     Returns:
         The axes.
     """
     if ax is None:
         _, ax = plt.subplots(figsize=(6, 6))
-    gdf.plot(ax=ax, color=[_color(c) for c in gdf[column]], edgecolor="k", linewidth=0.1)
+    colors = colors or class_colors(gdf[column])
+    gdf.plot(ax=ax, color=[colors.get(c, UNLABELED) for c in gdf[column]], edgecolor="k", linewidth=0.1)
     present = sorted(c for c in gdf[column].dropna().unique())
-    handles = [Patch(facecolor=_color(c), edgecolor="k", linewidth=0.3, label=_name(c)) for c in present]
+    handles = [Patch(facecolor=colors.get(c, UNLABELED), edgecolor="k", linewidth=0.3, label=_name(c)) for c in present]
     if gdf[column].isna().any():
         handles.append(Patch(facecolor=UNLABELED, edgecolor="k", linewidth=0.3, label="Unlabeled"))
     ax.legend(handles=handles, loc="lower left", fontsize=7)
@@ -166,8 +181,9 @@ def plot_prediction_maps(buildings: gpd.GeoDataFrame, test: gpd.GeoDataFrame, la
         The figure.
     """
     fig, axes = plt.subplots(1, 3, figsize=(15, 5.5))
-    plot_class_map(buildings, label_column, axes[0], "Survey label")
-    plot_class_map(buildings, f"pred_{model}", axes[1], f"Prediction ({model})")
+    colors = class_colors([*buildings[label_column], *buildings[f"pred_{model}"]])
+    plot_class_map(buildings, label_column, axes[0], "Survey label", colors)
+    plot_class_map(buildings, f"pred_{model}", axes[1], f"Prediction ({model})", colors)
     ok = test[label_column].to_numpy() == test[f"pred_{model}"].to_numpy()
     buildings.plot(ax=axes[2], color=UNLABELED, linewidth=0)
     test.to_crs(buildings.crs).plot(ax=axes[2], color=np.where(ok, CORRECT, WRONG), edgecolor="k", linewidth=0.1)
