@@ -876,8 +876,8 @@ wheels = [
 
 [[package]]
 name = "footprint-attributes"
-version = "1.0.0"
-source = { git = "https://github.com/GeomaticsCaminosUPM/footprint_attributes?rev=b1aea6c2bb75613e1eff25fa0ed80a2b71088184#b1aea6c2bb75613e1eff25fa0ed80a2b71088184" }
+version = "1.1.0"
+source = { git = "https://github.com/GeomaticsCaminosUPM/footprint_attributes?rev=v1.1.1#621c93b18a216b763876d9d710ccfb5bb829a607" }
 dependencies = [
     { name = "geopandas" },
     { name = "numpy" },
@@ -1714,7 +1714,7 @@ docs = [
 requires-dist = [
     { name = "catboost", specifier = ">=1.2.7" },
     { name = "folium", marker = "extra == 'sanity'", specifier = ">=0.17" },
-    { name = "footprint-attributes", git = "https://github.com/GeomaticsCaminosUPM/footprint_attributes?rev=b1aea6c2bb75613e1eff25fa0ed80a2b71088184" },
+    { name = "footprint-attributes", git = "https://github.com/GeomaticsCaminosUPM/footprint_attributes?rev=v1.1.1" },
     { name = "geopandas", specifier = ">=1.0" },
     { name = "imbalanced-learn", specifier = ">=0.13" },
     { name = "joblib", specifier = ">=1.4" },

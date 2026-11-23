@@ -22,8 +22,8 @@ dependencies = [
     "geopandas>=1.0",
     "tqdm>=4.66",
     "matplotlib>=3.9",
-    # Not on PyPI yet: installed straight from GitHub at a fixed commit.
-    "footprint-attributes @ git+https://github.com/GeomaticsCaminosUPM/footprint_attributes@b1aea6c2bb75613e1eff25fa0ed80a2b71088184",
+    # Not on PyPI yet: installed straight from GitHub at a fixed release tag.
+    "footprint-attributes @ git+https://github.com/GeomaticsCaminosUPM/footprint_attributes@v1.1.1",
 ]
 
 [project.optional-dependencies]
