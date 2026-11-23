@@ -24,7 +24,7 @@ from .assess import (
 
 # Submodules loaded on first access (see __getattr__).
 _LAZY_SUBMODULES = frozenset(
-    {"train", "test", "assess", "models", "cli", "predict", "figures"}
+    {"train", "test", "assess", "models", "cli", "predict", "figures", "sanity"}
 )
 
 
@@ -82,4 +82,5 @@ __all__ = [
     "cli",
     "predict",
     "figures",
+    "sanity",
 ]

@@ -1,6 +1,6 @@
 """Run the ``mlss`` command line.
 
-It provides the subcommands split, preprocess, train, test, report and assess.
+It provides the subcommands split, preprocess, train, test, report, assess and sanity.
 """
 
 from __future__ import annotations
@@ -129,6 +129,50 @@ def _assess_cmd(args: argparse.Namespace) -> int:
         pd.DataFrame(rows).to_csv(args.gen_output, index=False)
         logger.info("Generalizability stats written to %s", args.gen_output)
 
+    return 0
+
+
+def _sanity_cmd(args: argparse.Namespace) -> int:
+    """Handle the ``mlss sanity`` subcommand.
+
+    Predicts the labeled buildings, flags those the models agree are another
+    class than their survey label, and writes a CSV and an interactive map.
+    """
+    from . import sanity as sanity_module
+    from .predict import predict
+
+    cfg = load_config(args.config)
+    prep = prep_module.load_preprocessing_config(args.config)
+    data = args.data or ([cfg.test_gpkg] if cfg.test_gpkg else None)
+    if not data:
+        raise ConfigError("Pass --data, or set dataset.test_gpkg in config.yaml.")
+
+    # Real class names (cfg.class_names can hold the integer codes after preprocessing).
+    classes = [name.rsplit(" (", 1)[0] for name in cfg.label_map.values()] or None
+
+    buildings = predict(args.config, data, args.models)
+    buildings = prep_module.apply_label_replacements(buildings, cfg.label, prep.label_replacements, drop=False)
+    suspects = sanity_module.flag_suspects(
+        buildings, cfg.label, args.models,
+        agreement_threshold=args.agreement_threshold, classes=classes,
+    )
+
+    n_labeled = int(buildings[cfg.label].notna().sum())
+    print(f"\nSuspects: {len(suspects)} of {n_labeled} labeled buildings "
+          f"(models agree >= {args.agreement_threshold:.0%} on another class)")
+    if len(suspects):
+        table = suspects[[cfg.label, "consensus", "agreement", "entropy"]].rename(columns={cfg.label: "survey"})
+        print(table.head(20).to_string())
+        pd.DataFrame(suspects.drop(columns="geometry")).to_csv(args.output)
+        print(f"\nSuspects CSV -> {args.output}")
+    if not len(suspects):
+        print("No suspects: no CSV or map written. Try --data with the whole survey or a lower --agreement-threshold.")
+    if len(suspects) and not args.no_map:
+        path = sanity_module.make_sanity_map(
+            suspects, cfg.label, args.models, classes=classes, context=buildings,
+            output_path=args.map_output, agreement_threshold=args.agreement_threshold,
+        )
+        print(f"Map -> {path}")
     return 0
 
 
@@ -376,6 +420,30 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Compute SHAP feature importances and consensus ranking across models.",
     )
     assess_p.set_defaults(func=_assess_cmd)
+
+    # ---- sanity ----
+    sanity_p = sub.add_parser(
+        "sanity",
+        help="Flag labeled buildings the models contradict and write an interactive review map "
+             "(needs the 'sanity' extra).",
+    )
+    sanity_p.add_argument("--config", type=Path, default=_DEFAULT_CONFIG, help="Path to config.yaml")
+    sanity_p.add_argument(
+        "--data", type=Path, nargs="+", default=None,
+        help="GeoPackage(s) with the labeled buildings (default: dataset.test_gpkg).",
+    )
+    sanity_p.add_argument("--models", nargs="+", default=None,
+                          help="Models that vote (default: all enabled models).")
+    sanity_p.add_argument(
+        "--agreement-threshold", dest="agreement_threshold", type=float, default=0.6,
+        help="Minimum share of models that must agree on the other class (default: 0.6).",
+    )
+    sanity_p.add_argument("--output", type=Path, default=Path("sanity_suspects.csv"),
+                          help="Suspects CSV (default: sanity_suspects.csv).")
+    sanity_p.add_argument("--map-output", dest="map_output", type=Path, default=Path("sanity_check.html"),
+                          help="Interactive map (default: sanity_check.html).")
+    sanity_p.add_argument("--no-map", dest="no_map", action="store_true", help="Skip the HTML map.")
+    sanity_p.set_defaults(func=_sanity_cmd)
 
     #, split -----------------------------------------------------------------
     split_p = sub.add_parser(

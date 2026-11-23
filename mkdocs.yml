@@ -107,6 +107,7 @@ nav:
       - Command line: guide/cli.md
       - Output files: guide/outputs.md
       - Predicting new buildings: guide/prediction.md
+      - Checking labels: guide/sanity.md
   - How it works:
       - concepts/index.md
       - Spatial split: concepts/splitting.md
@@ -120,6 +121,7 @@ nav:
       - reference/index.md
       - Prediction: reference/predict.md
       - Figures: reference/figures.md
+      - Label check: reference/sanity.md
       - Configuration: reference/config.md
       - Data preparation: reference/dataset_prep.md
       - Models: reference/models.md

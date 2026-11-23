@@ -12,6 +12,7 @@ It is the code of the paper *Estimating building structural systems from footpri
 2. **Train**: five models (logistic regression, balanced random forest, histogram gradient boosting, XGBoost, CatBoost). Each one gets a cross-validated search over hyperparameters and imbalance strategies (class weights, Synthetic Minority Over-sampling Technique (SMOTE), SMOTE followed by Tomek-link cleaning), then class-probability divisors tuned on the validation set to maximize macro F1.
 3. **Test and assess**: macro F1, accuracy, Cohen's κ and the True Skill Statistic on the test set, agreement between models, bootstrap confidence intervals and feature importance.
 4. **Predict**: applies the trained models to any buildings, surveyed or not.
+5. **Check labels** (optional): flags surveyed buildings that the models contradict, on an interactive map for review.
 
 XGBoost and CatBoost train on the GPU when CUDA is available. Their standard wheels already include GPU support on Linux and Windows.
 
@@ -24,6 +25,17 @@ uv sync
 ```
 
 With pip: `pip install git+https://github.com/GeomaticsCaminosUPM/ml_structural_system.git`, or `pip install -r requirements.txt` for the tested versions. Python 3.12 or newer.
+
+## Checking labels
+
+Survey labels can be wrong. `mlss sanity` flags the surveyed buildings for which most models agree on a different class, and writes `sanity_suspects.csv` plus an interactive map (`sanity_check.html`). Each suspect shows every model's vote and a Street View link, and a reviewer can record the right class in the browser and export the corrections as CSV. The map needs the optional `sanity` extra:
+
+```bash
+uv sync --extra sanity        # or: pip install "ml-structural-system[sanity]"
+mlss sanity --config config.yaml --data survey.gpkg
+```
+
+See [Checking labels](docs/guide/sanity.md).
 
 ## Quick start
 

@@ -16,6 +16,7 @@ flowchart LR
 | `mlss test` | Scores every final model on the test split |
 | `mlss assess` | Compares the models on the same buildings: agreement, confidence intervals, feature importance |
 | `mlss report` | `train`, `test` and `assess` in one go, plus a summary |
+| `mlss sanity` | Flags surveyed buildings that the models contradict and writes an interactive review map (needs the `sanity` extra) |
 
 ## `mlss split`
 
@@ -61,3 +62,17 @@ No options beyond `--config`.
 | `--gap-threshold` | `0.05` | Drop in macro F1 between cross-validation and test that flags low generalizability |
 | `--explain` | | Also compute feature importance and the consensus ranking |
 | `--no-mlflow` | | Do not log the assessment to MLflow |
+
+## `mlss sanity`
+
+Needs `uv sync --extra sanity`. See [Checking labels](sanity.md).
+
+| Option | Default | Meaning |
+|---|---|---|
+| `--data` | `dataset.test_gpkg` | GeoPackage(s) with the surveyed buildings. Pass the whole survey to check every label |
+| `--models` | enabled models | Models that vote |
+| `--agreement-threshold` | `0.6` | Share of models that must agree on the other class |
+| `--output` | `sanity_suspects.csv` | Suspects table |
+| `--map-output` | `sanity_check.html` | Interactive map |
+| `--no-map` | | Write only the CSV |
+
