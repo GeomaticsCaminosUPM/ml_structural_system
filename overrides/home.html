@@ -1,0 +1,93 @@
+{% extends "main.html" %}
+
+{% block tabs %}{{ super() }}{% endblock %}
+
+{% block content %}
+{% set paper = "https://geomaticscaminosupm.github.io/ml_structural_system_paper/" %}
+{% set base = config.site_url %}
+<div class="ml-home">
+
+  <section class="ml-hero">
+    <div class="ml-hero__text">
+      <p class="ml-kicker">Open-source library</p>
+      <h1>What is this building made of?</h1>
+      <p class="ml-lead">Predict the structural system of individual buildings (adobe, reinforced concrete, masonry, steel) from their footprint, their neighbors and a few low-cost attributes.</p>
+      <p class="ml-actions">
+        <a class="ml-btn ml-btn--solid" href="getting-started/installation/">Get started</a>
+        <a class="ml-btn" href="{{ paper }}">Paper and results map</a>
+      </p>
+    </div>
+    <div class="ml-mosaic" aria-hidden="true">
+      {% for i in range(64) %}
+      {% set k = (i * 7 + (i // 8) * 3 + (i // 5)) % 9 %}
+      <span class="c{{ k if k < 5 else 4 }}"></span>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="ml-section">
+    <h2>How it works</h2>
+    <p class="ml-sub">From a footprint file and a field survey to a prediction for every building.</p>
+    <div class="ml-steps">
+      <div class="ml-step c0"><b>01</b><h3>Split</h3><p>Computes shape features from the footprints and splits the surveyed buildings by <em>blocks</em>, so neighbors never leak between train and test.</p><code>mlss split</code></div>
+      <div class="ml-step c1"><b>02</b><h3>Train</h3><p>Five models, each with a cross-validated search over hyperparameters and imbalance strategies, plus a tuned decision rule for rare classes.</p><code>mlss train</code></div>
+      <div class="ml-step c2"><b>03</b><h3>Assess</h3><p>Macro F1, Cohen's κ, confidence intervals, agreement between models and feature importance, all on held-out blocks.</p><code>mlss report</code></div>
+      <div class="ml-step c3"><b>04</b><h3>Predict</h3><p>Apply the trained models to any buildings, surveyed or not, and get one class per model.</p><code>predict()</code></div>
+      <div class="ml-step c4"><b>05</b><h3>Check labels</h3><p>Flag surveyed buildings that the models contradict, and review them on an interactive map.</p><code>mlss sanity</code></div>
+    </div>
+    <p class="ml-more"><a href="concepts/">Read how the method works &rarr;</a></p>
+  </section>
+
+  <section class="ml-section">
+    <h2>Use it</h2>
+    <div class="ml-use">
+      <div>
+        <h3>1. Install</h3>
+        <pre><code>git clone https://github.com/GeomaticsCaminosUPM/ml_structural_system.git
+cd ml_structural_system
+uv sync</code></pre>
+        <h3>2. Run an experiment</h3>
+        <pre><code>mlss split      --config config.yaml
+mlss preprocess --config config.yaml
+mlss report     --config config.yaml</code></pre>
+      </div>
+      <div>
+        <h3>3. Predict new buildings</h3>
+        <pre><code>from ml_structural_system.predict import predict
+
+buildings = predict("config.yaml", "new_area.gpkg")
+# one pred_&lt;model&gt; column per model</code></pre>
+        <h3>4. Check the labels</h3>
+        <pre><code>uv sync --extra sanity
+mlss sanity --config config.yaml --data survey.gpkg</code></pre>
+      </div>
+    </div>
+    <p class="ml-more"><a href="getting-started/quickstart/">Quickstart</a> &nbsp;&middot;&nbsp; <a href="guide/cli/">Command line</a> &nbsp;&middot;&nbsp; <a href="guide/configuration/">Configuration</a> &nbsp;&middot;&nbsp; <a href="reference/">API reference</a></p>
+  </section>
+
+  <section class="ml-section">
+    <h2>What you get</h2>
+    <p class="ml-sub">Output of the <a href="examples/ensanche-quisquella/">Ensanche Quisqueya example</a>, trained in a few minutes on a laptop.</p>
+    <div class="ml-figs">
+      <figure><img src="assets/scores.jpg" alt="Test scores of each model" loading="lazy"><figcaption>Test scores</figcaption></figure>
+      <figure><img src="assets/confusion_matrices.jpg" alt="Confusion matrices" loading="lazy"><figcaption>Confusion matrices</figcaption></figure>
+      <figure class="wide"><img src="assets/maps.jpg" alt="Predicted structural systems on a map" loading="lazy"><figcaption>Predictions on the map</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="ml-section ml-paper">
+    <div>
+      <h2>The paper</h2>
+      <p><em>Estimating building structural systems from footprints: transferability of machine learning models across three Latin American cities.</em> The same code trains the models of Guatemala City, San José and Santo Domingo, and tests how they transfer between cities.</p>
+    </div>
+    <p class="ml-actions">
+      <a class="ml-btn ml-btn--solid" href="{{ paper }}">Paper website</a>
+      <a class="ml-btn" href="about/citation/">How to cite</a>
+      <a class="ml-btn" href="https://github.com/GeomaticsCaminosUPM/ml_structural_system">GitHub</a>
+    </p>
+  </section>
+
+</div>
+{% endblock %}
+
+{% block footer %}{{ super() }}{% endblock %}

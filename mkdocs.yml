@@ -9,20 +9,17 @@ copyright: Copyright &copy; Advanced Geomatics group, Universidad Politécnica d
 
 theme:
   name: material
+  custom_dir: overrides
+  font:
+    text: Inter
+    code: JetBrains Mono
   icon:
     repo: fontawesome/brands/github
     logo: material/office-building-outline
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: indigo
-      accent: indigo
-      toggle: { icon: material/weather-night, name: Dark mode }
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: indigo
-      accent: indigo
-      toggle: { icon: material/weather-sunny, name: Light mode }
+    scheme: default
+    primary: white
+    accent: red
   features:
     - navigation.tabs
     - navigation.sections
@@ -36,6 +33,9 @@ theme:
     - content.code.annotate
     - content.tabs.link
     - content.action.edit
+
+extra_css:
+  - stylesheets/extra.css
 
 markdown_extensions:
   - abbr
