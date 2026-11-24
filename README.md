@@ -2,8 +2,8 @@
 
 <p align="center">
   <a href="LICENSE"><img alt="License: EUPL-1.2" src="https://img.shields.io/badge/license-EUPL--1.2-111?style=flat-square"></a>
-  <a href="https://github.com/GeomaticsCaminosUPM/ml_structural_system/actions/workflows/tests.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/GeomaticsCaminosUPM/ml_structural_system/tests.yml?branch=main&label=CI&style=flat-square"></a>
-  <a href="https://geomaticscaminosupm.github.io/ml_structural_system/"><img alt="Docs" src="https://img.shields.io/github/actions/workflow/status/GeomaticsCaminosUPM/ml_structural_system/docs.yml?branch=main&label=docs&style=flat-square"></a>
+  <a href="https://github.com/GeomaticsCaminosUPM/ml_structural_system/actions/workflows/tests.yml"><img alt="CI" src="https://github.com/GeomaticsCaminosUPM/ml_structural_system/actions/workflows/tests.yml/badge.svg?branch=main"></a>
+  <a href="https://geomaticscaminosupm.github.io/ml_structural_system/"><img alt="Docs" src="https://github.com/GeomaticsCaminosUPM/ml_structural_system/actions/workflows/docs.yml/badge.svg?branch=main"></a>
   <img alt="Python 3.12+" src="https://img.shields.io/badge/python-3.12%2B-111?style=flat-square">
 </p>
 
