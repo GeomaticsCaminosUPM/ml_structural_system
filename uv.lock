@@ -1,5 +1,5 @@
 version = 1
-revision = 5
+revision = 3
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'win32'",
@@ -877,7 +877,7 @@ wheels = [
 [[package]]
 name = "footprint-attributes"
 version = "1.1.0"
-source = { git = "https://github.com/GeomaticsCaminosUPM/footprint_attributes?rev=v1.1.1#621c93b18a216b763876d9d710ccfb5bb829a607" }
+source = { git = "https://github.com/GeomaticsCaminosUPM/footprint_attributes?rev=v1.1.1#3abae021807f82a61a4f7c858bddccfbc3ae21c1" }
 dependencies = [
     { name = "geopandas" },
     { name = "numpy" },
